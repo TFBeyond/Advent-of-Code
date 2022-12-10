@@ -1,3 +1,5 @@
+import aocutils
+
 results_matrix = {
     "A": { # opp rock
         "X": 4, # my rock
@@ -36,11 +38,11 @@ results_matrix_2 = {
 
 pt1_total=pt2_total = 0
 line_counter = 1
-with open("C:/Users/rob_k/Documents/advent_of_code/2022/inputs/Day_2_input.txt", 'r') as input:
-    for line in input.readlines():
-        pt1_total += results_matrix[line[0]][line[2]]
-        pt2_total += results_matrix_2[line[0]][line[2]]
-        line_counter += 1
+input = aocutils.getSplitAoCInput()
+for line in input:
+    pt1_total += results_matrix[line[0]][line[1]]
+    pt2_total += results_matrix_2[line[0]][line[1]]
+    line_counter += 1
 
 print("part 1's total is: {}".format(pt1_total))
 print("part 2's total is: {}".format(pt2_total))

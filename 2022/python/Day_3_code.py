@@ -1,4 +1,5 @@
 import string
+import aocutils
 
 priority_mapping = {}
 current_group = []
@@ -10,10 +11,9 @@ for char in string.ascii_lowercase + string.ascii_uppercase:
     priority_mapping[char] = _
     _ += 1
 
-
-with open("C:/Users/rob_k/Documents/advent_of_code/2022/inputs/Day_3_input.txt", 'r') as input:
-    for line in input.readlines():
-        line = line.strip()
+input = aocutils.getSplitAoCInput()
+for line in input:
+        line = line[0]
         current_group.append(set(line))
 
         # pt1 answer

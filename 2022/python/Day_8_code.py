@@ -1,10 +1,11 @@
+import aocutils
+
 visible_count = 0
 max_score = 0
 tree_map = {}
 
-with open("C:/Users/rob_k/Documents/advent_of_code/Day_8_input.txt", 'r') as input:
-    lines = input.readlines()
-    for num,line in enumerate(lines):
+input = aocutils.getAoCInput()
+for num,line in enumerate(input):
         tree_map[str(num)] = []
         for char in line.strip():
             tree_map[str(num)].append(int(char))

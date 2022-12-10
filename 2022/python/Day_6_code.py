@@ -1,5 +1,6 @@
-with open("C:/Users/rob_k/Documents/advent_of_code/Day_6_input.txt", 'r') as input:
-    line = input.readline()
+import aocutils
+input = aocutils.getAoCInput()
+for line in input:
     buffer = []
     packet_found = False
     for pos,char in enumerate(line, start=1):
