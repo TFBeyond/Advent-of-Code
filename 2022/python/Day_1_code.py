@@ -1,15 +1,17 @@
+import aocutils
+
 elf_dict = {}
 elf_counter = 1
 total = 0
 
-with open("C:/Users/rob_k/Documents/advent_of_code/2022/inputs/Day_1_input.txt", 'r') as input:
-    for x in input.readlines():
-        if x != '\n':
-            total += int(x)
-        else: 
-            elf_dict["elf_{}".format(elf_counter)] = total
-            elf_counter += 1
-            total = 0
+input = aocutils.getAoCInput()
+for x in input:
+    if x != '\n':
+        total += int(x)
+    else: 
+        elf_dict["elf_{}".format(elf_counter)] = total
+        elf_counter += 1
+        total = 0
 key = max(elf_dict, key=elf_dict.get)
 
 print("The elf with the largest supply is: {} with a value of: {}".format(key, elf_dict[key]))
