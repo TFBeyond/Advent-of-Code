@@ -27,23 +27,17 @@ for line in input:
 for step, instruction in enumerate(addition_queue):
 
      #row number is the larger number between 1 and the ceiling of step ceil-divided by 40. This prevents div0 problems on cycle 0
-    row_num = max(1,-(step//-40))
+    row_num = step // 40 + 1
+ 
     if step in interesting_cycles:
         interesting_strengths.update({record_cycle: X * step })
         record_cycle += 40
     X += int(addition_queue[step])
 
     bump = 40 * (row_num-1)
-
-    if bump > 40:
-        pass
     
     if X>=0 and X <= 39:
         for n in [-1,0,1]:
-            #if X+n >= 0 and X+n <= 39:
-            # print("X is {}".format(X))
-            # print("step/row_num is {}".format(step//row_num))
-           # if X+n == (step)//row_num:
            if X+bump+n == step:
                 screen["row_"+str(row_num)][X+n] = "#"
 
