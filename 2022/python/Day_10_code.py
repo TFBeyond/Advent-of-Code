@@ -5,8 +5,6 @@ addition_queue = [0]
 interesting_strengths = {}
 interesting_cycles = [20,60,100,140,180,220]
 total_strength = 0
-sprite_position = 1
-visited_places = set()
 screen = {}
 for name in ["row_" + str(x) for x in range(1,7)]:
     screen.update({name: ['.' for x in range(40)]})
@@ -48,6 +46,5 @@ for cycle, strength in interesting_strengths.items():
     total_strength += strength
 print("Therefore, the sum of interesting strengths is {}!".format(total_strength))
 
-# print("{}".format(visited_places))
 for line in screen.values():
     print("".join(line))
