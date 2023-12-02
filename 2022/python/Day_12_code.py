@@ -1,12 +1,17 @@
 import aocutils
 import random
+import time
+import os
+from copy import deepcopy
 
 height_map = {}
 current_height = 1
 step_count = 0
 input = aocutils.getAoCInput()
 successful_walks = []
-failed_walks = set()
+failed_walks = []
+moves_to_investigate = [(0,1), (-1,0), (1,0), (0,-1)] #right, down, Up, left
+visualise_walk = True
 
 def y_bounding(coord, height_map):
     if coord <= 0:
@@ -34,7 +39,10 @@ for row,line in enumerate(input):
                 end_loc = [row,col]
             height_map[row].append(height)
 
-while len(successful_walks) < 3:
+while len(successful_walks) < 1:
+
+    if visualise_walk == True:
+        visited_map = deepcopy(height_map)
     
     path_history = set()
     path_history.add(tuple(start_loc))
@@ -42,9 +50,9 @@ while len(successful_walks) < 3:
     present_loc = start_loc
 
     while present_loc != end_loc:
-        moves_to_investigate = [(-1,0), (1,0), (0,-1), (0,1)] #up, down, left, right
         new_potential_coordinates = []
         uphill_moves = []
+        potential_path = []
         current_height = height_map[present_loc[0]][present_loc[1]]
 
         for row, col in moves_to_investigate: # For each potential direction to go...
@@ -52,26 +60,60 @@ while len(successful_walks) < 3:
             col = y_bounding(present_loc[1]+col,height_map)
             coord_set = set()
             coord_set.add((row,col))
-            if coord_set.issubset(path_history) == False and tuple(path_history.union(coord_set)) not in failed_walks:
+            potential_path = path_history
+            potential_path = potential_path.union(coord_set)
+            if coord_set.issubset(path_history) == False and potential_path not in failed_walks:
+                if abs(row-end_loc[0]) < abs(present_loc[0]-end_loc[0]):
+                    new_potential_coordinates.insert(0,[row,col])
+                    continue
+                if abs(col-end_loc[1]) < abs(present_loc[1]-end_loc[1]):
+                    new_potential_coordinates.insert(0,[row,col])
+                    continue
+
                 new_potential_coordinates.append([row,col]) #Figure out the coordinates
 
         if len(new_potential_coordinates) == 0:
-            failed_walks.add(tuple(path_history))
+            failed_walks.append(path_history)
             break
         
         for row, col in new_potential_coordinates:
-            if  height_map[row][col] == current_height  \
-                or height_map[row][col] == current_height+1:
+            if  height_map[row][col] == current_height+1:
+                    uphill_moves.insert(0,[row,col])
+                    break
+            elif height_map[row][col] == current_height:
                     uphill_moves.append([row,col])
+
         
         if len(uphill_moves) == 0:
-            failed_walks.add(tuple(path_history))
+            print("No valid climbing moves after {} steps!".format(step_count))
+            failed_walks.append(path_history)
             break
 
-        present_loc = random.choice(uphill_moves)
-        uphill_moves = []
+        #present_loc = random.choice(uphill_moves)
+        present_loc = uphill_moves[0]
         current_height = height_map[present_loc[0]][present_loc[1]]
-        print("I decided to go to {}!".format(present_loc))
+
+        if visualise_walk == True:
+            visited_map[present_loc[0]][present_loc[1]] = "+"
+            for key, row in visited_map.items():
+                letterrow = []
+                thisRow = False
+                destRow = False
+                if key == present_loc[0]: thisRow = True
+                if key == end_loc[0]: destRow = True
+                for col, char in enumerate(row):
+                    if thisRow and col == present_loc[1]:
+                        letterrow.append("*")
+                    if destRow and col == end_loc[1]:
+                        letterrow.append("!")
+                    elif isinstance(char,int):    
+                        letterrow.append(chr(char+96))
+                    else: letterrow.append(char)
+                print("".join(letterrow))
+            print("")
+            time.sleep(0.05)
+            os.system('cls' if os.name == 'nt' else 'clear')
+        #print("I decided to go to {}!".format(present_loc))
         path_history.add(tuple(present_loc))
         step_count += 1
         if present_loc == end_loc:
